@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const registerservice = async (req, res) => {
 
-    console.log("ejecutando registro de los servicios");
+    console.log("ejecutando el registro de los servicios");
     console.log('req.body:', req.body);
     console.log(req.body.Limitantes);
 
