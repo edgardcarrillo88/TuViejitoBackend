@@ -12,7 +12,7 @@ const registeruser = async (req, res) => {
     await data.save();
     res.status(200).json({ message: 'Datos guardados en la base de datos' });
 
-   
+
 }
 
 const getuserdata = async (req, res) => {
@@ -23,22 +23,45 @@ const getuserdata = async (req, res) => {
 
 }
 
+const getSingleUserData = async (req, res) => {
+    console.log("ejecutando get single user data");
+    const userEmail = req.query.email;
+    console.log(userEmail);
+
+    try {
+        const userData = await usersmodel.findOne({ correo: userEmail });
+        if (userData) {
+            console.log('Datos del usuario obtenidos correctamente:', userData);
+            res.status(200).json(userData);
+        } else {
+            console.log('Usuario no encontrado');
+            res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+    } catch (error) {
+        console.error('Error al obtener datos del usuario:', error);
+        res.status(500).json({ message: 'Error al obtener datos del usuario' });
+    }
+};
+
 
 const deleteuserdata = async (req, res) => {
     console.log("borrando todo");
-    usersmodel.deleteMany({})
-        .then(() => {
-            console.log('Todos los datos del actual eliminados correctamente');
-        })
-        .catch((error) => {
-            console.error('Error al eliminar documentos:', error);
-        });
+
+    try {
+        await usersmodel.deleteOne({ _id: req.body._id }); // Buscamos y eliminamos el documento con el ID especificado
+        console.log(`Usuario con ID ${req.body._id} eliminado correctamente`);
+        res.status(200).send({ message: `Usuario con ID ${req.body._id} eliminado` });
+    } catch (error) {
+        console.error(`Error al eliminar usuario con ID ${req.body._id}:`, error);
+        res.status(500).send({ message: `Error al eliminar usuario` });
+    }
 }
 
 
 module.exports = {
     registeruser,
     getuserdata,
+    getSingleUserData,
     deleteuserdata,
 }
 
