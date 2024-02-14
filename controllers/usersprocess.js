@@ -23,6 +23,22 @@ const getuserdata = async (req, res) => {
 
 }
 
+
+const getuserdatafilter = async (req, res) => {
+
+    console.log("ejecutando get user data filtered");
+    try {
+        const cuidadores = await usersmodel.find({ Tipo: 'Cuidador' });
+        res.status(200).json(cuidadores);
+    } catch (error) {
+        console.error('Error al obtener datos de los cuidadores:', error);
+        res.status(500).json({ message: 'Error al obtener datos de los cuidadores' });
+    }
+}
+
+
+
+
 const getSingleUserData = async (req, res) => {
     console.log("ejecutando get single user data");
     const userEmail = req.query.email;
@@ -63,6 +79,7 @@ module.exports = {
     getuserdata,
     getSingleUserData,
     deleteuserdata,
+    getuserdatafilter
 }
 
 
